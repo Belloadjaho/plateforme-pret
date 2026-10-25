@@ -7,14 +7,8 @@ export default function Footer() {
         </div>
         <span className="text-white font-bold text-lg">Prêt<span className="text-emerald-500">Direct</span></span>
       </div>
-      <p className="flex gap-4">
-        <a href="#" className="hover:text-white transition">Mentions légales</a>
-        <span>·</span>
-        <a href="#" className="hover:text-white transition">Confidentialité</a>
-        <span>·</span>
-        <a href="#" className="hover:text-white transition">Conditions</a>
-      </p>
-      <p>© 2026 PrêtDirect</p>
+      
+      <p>© 2026 PrêtDirect</p><span className="text-white">Réalisé par BELLO ROUFAI Bello Edjett Adjajo</span>
     </footer>
   );
 }
