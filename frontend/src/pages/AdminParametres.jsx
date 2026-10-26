@@ -23,7 +23,8 @@ export default function AdminParametres() {
     const fetchAdmin = async () => {
       const token = localStorage.getItem('token');
       try {
-        const res = await axios.get('http://localhost:5000/api/users/me', {
+        // 👇 CORRIGÉ : backticks et slash
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/users/me`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setFormData({
@@ -36,7 +37,6 @@ export default function AdminParametres() {
         });
       } catch (err) {
         console.error("Erreur API, on garde le localStorage", err);
-        // Si l'API échoue, on garde les infos du localStorage déjà chargées
       } finally {
         setLoading(false);
       }
@@ -55,7 +55,8 @@ export default function AdminParametres() {
     const token = localStorage.getItem('token');
 
     try {
-      const res = await axios.put('http://localhost:5000/api/users/me', formData, {
+      // 👇 CORRIGÉ : backticks et slash
+      const res = await axios.put(`${import.meta.env.VITE_API_URL}/users/me`, formData, {
         headers: { Authorization: `Bearer ${token}` }
       });
       

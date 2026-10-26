@@ -15,14 +15,15 @@ export default function DetailDemande() {
   const fetchData = async () => {
     const token = localStorage.getItem('token');
     try {
-      const demandeRes = await axios.get(`http://localhost:5000/api/demandes/${id}`, {
+      // 👇 CORRIGÉ 1
+      const demandeRes = await axios.get(`${import.meta.env.VITE_API_URL}/demandes/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setDemande(demandeRes.data);
 
-      // 👇 APPEL À LA NOUVELLE ROUTE ICI
       if (demandeRes.data.statut === 'acceptee') {
-        const echeancesRes = await axios.get(`http://localhost:5000/api/demandes/${id}/echeances`, {
+        // 👇 CORRIGÉ 2
+        const echeancesRes = await axios.get(`${import.meta.env.VITE_API_URL}/demandes/${id}/echeances`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setEcheances(echeancesRes.data);
@@ -42,7 +43,8 @@ export default function DetailDemande() {
   const handleStatutChange = async (nouveauStatut) => {
     const token = localStorage.getItem('token');
     try {
-      await axios.put(`http://localhost:5000/api/demandes/${id}/statut`, 
+      // 👇 CORRIGÉ 3
+      await axios.put(`${import.meta.env.VITE_API_URL}/demandes/${id}/statut`, 
         { statut: nouveauStatut, motif_refus: nouveauStatut === 'refusee' ? motifRefus : null },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -56,10 +58,11 @@ export default function DetailDemande() {
   const handleValiderPaiement = async (echeanceId) => {
     const token = localStorage.getItem('token');
     try {
-      await axios.put(`http://localhost:5000/api/demandes/remboursements/${echeanceId}/valider`, {}, {
+      // 👇 CORRIGÉ 4
+      await axios.put(`${import.meta.env.VITE_API_URL}/demandes/remboursements/${echeanceId}/valider`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      fetchData(); // Recharge les données après validation
+      fetchData();
     } catch (err) {
       console.error(err);
       alert("Erreur lors de la validation");

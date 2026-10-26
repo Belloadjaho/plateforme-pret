@@ -21,13 +21,13 @@ export default function Register() {
     e.preventDefault();
     setError('');
     
-    // On sépare le "Nom complet" en Prénom (1er mot) et Nom (le reste)
     const nameParts = formData.nom.trim().split(' ');
     const prenom = nameParts[0] || '';
     const nom = nameParts.slice(1).join(' ') || 'Inconnu';
 
     try {
-      await axios.post('http://localhost:5000/api/auth/register', {
+      // 👇 CORRIGÉ
+      await axios.post(`${import.meta.env.VITE_API_URL}/auth/register`, {
         nom: nom,
         prenom: prenom,
         email: formData.email,
@@ -42,7 +42,6 @@ export default function Register() {
       }, 2000);
 
     } catch (err) {
-      // 👇 Affiche l'erreur exacte du backend
       setError(err.response?.data?.message || err.response?.data?.error || "Erreur lors de l'inscription");
     }
   };

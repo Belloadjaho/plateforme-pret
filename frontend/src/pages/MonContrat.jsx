@@ -13,10 +13,10 @@ export default function MonContrat() {
     const fetchData = async () => {
       const token = localStorage.getItem('token');
       try {
-        // On récupère la demande ET les échéances en même temps
+        // 👇 CORRIGÉ
         const [demandeRes, echeancesRes] = await Promise.all([
-          axios.get('http://localhost:5000/api/demandes/ma-demande', { headers: { Authorization: `Bearer ${token}` } }),
-          axios.get('http://localhost:5000/api/demandes/mes-remboursements', { headers: { Authorization: `Bearer ${token}` } })
+          axios.get(`${import.meta.env.VITE_API_URL}/demandes/ma-demande`, { headers: { Authorization: `Bearer ${token}` } }),
+          axios.get(`${import.meta.env.VITE_API_URL}/demandes/mes-remboursements`, { headers: { Authorization: `Bearer ${token}` } })
         ]);
         setDemande(demandeRes.data);
         setEcheances(echeancesRes.data);
@@ -87,10 +87,8 @@ export default function MonContrat() {
 
       <div className="flex flex-col lg:flex-row gap-8 items-start">
         
-        {/* 👇 TOUT CE QUI EST DANS CETTE DIV SERA DANS LE PDF */}
         <div id="contrat-pdf" className="w-full lg:w-2/3 bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
           
-          {/* En-tête du contrat */}
           <div className="flex justify-between items-center border-b border-gray-100 pb-6 mb-6">
             <div className="flex items-center gap-2">
               <div className="bg-emerald-500 text-white p-1.5 rounded-lg">
@@ -104,7 +102,6 @@ export default function MonContrat() {
             </div>
           </div>
 
-          {/* Infos principales */}
           <div className="bg-gray-50 rounded-xl p-6 flex justify-between items-center mb-8">
             <div>
               <p className="text-xs text-emerald-600 font-bold mb-1">EMPRUNTEUR</p>
@@ -119,7 +116,6 @@ export default function MonContrat() {
             </div>
           </div>
 
-          {/* Détails financiers */}
           <div className="grid grid-cols-2 gap-y-6 gap-x-8 mb-8">
             <div>
               <p className="text-sm text-gray-500 mb-1">Montant emprunté</p>
@@ -147,7 +143,6 @@ export default function MonContrat() {
             </div>
           </div>
 
-          {/* 👇 L'ÉCHÉANCIER AJOUTÉ ICI */}
           <div className="mt-10 mb-6">
             <h3 className="text-lg font-bold text-[#0b1a2a] mb-4 border-b border-gray-100 pb-2">Calendrier de remboursement</h3>
             <div className="overflow-x-auto">
@@ -180,14 +175,12 @@ export default function MonContrat() {
             </div>
           </div>
 
-          {/* Footer du contrat */}
           <div className="bg-emerald-50 rounded-lg p-4 flex items-center gap-2 text-emerald-700 text-sm mt-8">
             <ShieldCheck size={18} />
             Document sécurisé • Généré le {dateGeneration}
           </div>
         </div>
 
-        {/* COLONNE DROITE : ACTIONS (Hors PDF) */}
         <div className="w-full lg:w-1/3 space-y-4">
           <button 
             onClick={telechargerPDF} 

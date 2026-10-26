@@ -28,7 +28,8 @@ export default function NouvelleDemande() {
   useEffect(() => {
     const fetchOffre = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/offres/active', {
+        // 👇 CORRIGÉ 1
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/offres/active`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setOffre(res.data);
@@ -42,16 +43,13 @@ export default function NouvelleDemande() {
 
   // 👇 CALCUL INTELLIGENT DU TAUX
   const getTauxActuel = () => {
-    if (!offre || !offre.tranches || offre.tranches.length === 0) return 5; // Taux par défaut
+    if (!offre || !offre.tranches || offre.tranches.length === 0) return 5;
     
-    // On parcourt les tranches dans l'ordre
     for (let i = 0; i < offre.tranches.length; i++) {
       if (formData.montant_demande <= offre.tranches[i].max) {
         return offre.tranches[i].taux;
       }
     }
-    
-    // Si le montant dépasse toutes les tranches, on prend le dernier taux
     return offre.tranches[offre.tranches.length - 1].taux;
   };
 
@@ -73,7 +71,8 @@ export default function NouvelleDemande() {
     setLoading(true);
 
     try {
-      await axios.post('http://localhost:5000/api/demandes', {
+      // 👇 CORRIGÉ 2
+      await axios.post(`${import.meta.env.VITE_API_URL}/demandes`, {
         montant_demande: montantSecurise,
         duree_mois: dureeSecurisee,
         taux_applique: taux,

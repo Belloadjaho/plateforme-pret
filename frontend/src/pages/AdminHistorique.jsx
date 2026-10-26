@@ -13,8 +13,8 @@ export default function AdminHistorique() {
     const token = localStorage.getItem('token');
     try {
       const [usersRes, statsRes] = await Promise.all([
-        axios.get('http://localhost:5000/api/users', { headers: { Authorization: `Bearer ${token}` } }),
-        axios.get('http://localhost:5000/api/demandes/admin/stats', { headers: { Authorization: `Bearer ${token}` } })
+        axios.get(`${import.meta.env.VITE_API_URL}/users`, { headers: { Authorization: `Bearer ${token}` } }),
+        axios.get(`${import.meta.env.VITE_API_URL}/demandes/admin/stats`, { headers: { Authorization: `Bearer ${token}` } })
       ]);
       setUsers(usersRes.data);
       setStats(statsRes.data);
@@ -35,7 +35,7 @@ export default function AdminHistorique() {
     const token = localStorage.getItem('token');
     const nouveauStatut = currentStatut === 'actif' ? 'suspendu' : 'actif';
     try {
-      await axios.put(`http://localhost:5000/api/users/${id}/statut`, 
+      await axios.put(`${import.meta.env.VITE_API_URL}/users/${id}/statut`, 
         { statut: nouveauStatut },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -51,7 +51,7 @@ export default function AdminHistorique() {
     if (!window.confirm("Êtes-vous sûr de vouloir supprimer cet utilisateur ? Cette action est irréversible.")) return;
     const token = localStorage.getItem('token');
     try {
-      await axios.delete(`http://localhost:5000/api/users/${id}`, {
+      await axios.delete(`${import.meta.env.VITE_API_URL}/users/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       chargerData();

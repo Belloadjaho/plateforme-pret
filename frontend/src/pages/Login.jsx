@@ -10,16 +10,16 @@ export default function Login() {
 
   const navigate = useNavigate();
 
-    const handleLogin = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     setError('');
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/login', { email, password });
+      // 👇 CORRIGÉ
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/auth/login`, { email, password });
       
       localStorage.setItem('token', res.data.token);
       localStorage.setItem('user', JSON.stringify(res.data.user));
       
-      // 👇 LA REDIRECTION INTELLIGENTE EST ICI
       if (res.data.user.role === 'admin') {
         navigate('/admin');
       } else {
@@ -50,11 +50,9 @@ export default function Login() {
         </nav>
       </header>
 
-      {/* CONTENU PRINCIPAL */}
       <main className="flex-1 flex items-center justify-center p-4 md:p-8">
         <div className="bg-white rounded-2xl shadow-xl flex flex-col md:flex-row w-full max-w-5xl overflow-hidden border border-gray-100">
           
-          {/* PARTIE GAUCHE (Bleu Nuit) */}
           <div className="bg-[#0b1a2a] text-white p-10 md:w-1/2 flex flex-col justify-center">
             <p className="text-emerald-500 font-bold tracking-wider text-sm mb-4">HEUREUX DE VOUS REVOIR</p>
             <h1 className="text-4xl md:text-5xl font-serif font-bold leading-tight mb-6">
@@ -85,7 +83,6 @@ export default function Login() {
             </ul>
           </div>
 
-          {/* PARTIE DROITE (Formulaire) */}
           <div className="p-8 md:p-12 md:w-1/2 flex flex-col justify-center bg-white">
             <div className="flex items-center gap-2 mb-6">
               <div className="bg-emerald-500 text-white p-1.5 rounded-lg">

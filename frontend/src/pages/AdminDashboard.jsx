@@ -11,8 +11,8 @@ export default function AdminDashboard() {
     const fetchDemandes = async () => {
       const token = localStorage.getItem('token');
       try {
-        // On récupère toutes les demandes (le backend sait qu'on est admin)
-        const res = await axios.get('http://localhost:5000/api/demandes', {
+        // 👇 CORRECTION : Ajout de "await" et d'un slash "/" avant demandes
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/demandes`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setDemandes(res.data);

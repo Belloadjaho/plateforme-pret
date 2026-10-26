@@ -12,7 +12,8 @@ export default function AdminDemandes() {
   const chargerDemandes = useCallback(async () => {
     const token = localStorage.getItem('token');
     try {
-      const res = await axios.get('http://localhost:5000/api/demandes', {
+      // 👇 CORRECTION : Ajout de "await"
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/demandes`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setDemandes(res.data);
@@ -31,7 +32,7 @@ export default function AdminDemandes() {
   const handleStatutChange = async (id, nouveauStatut, motifRefus = null) => {
     const token = localStorage.getItem('token');
     try {
-      await axios.put(`http://localhost:5000/api/demandes/${id}/statut`, 
+      await axios.put(`${import.meta.env.VITE_API_URL}/demandes/${id}/statut`, 
         { statut: nouveauStatut, motif_refus: motifRefus },
         { headers: { Authorization: `Bearer ${token}` } }
       );

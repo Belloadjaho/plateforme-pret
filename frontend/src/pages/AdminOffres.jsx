@@ -22,7 +22,8 @@ export default function AdminOffres() {
     const fetchOffre = async () => {
       const token = localStorage.getItem('token');
       try {
-        const res = await axios.get('http://localhost:5000/api/offres/active', {
+        // 👇 CORRIGÉ : backticks et slash
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/offres/active`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         // Si l'offre n'a pas de tranches, on met un tableau vide
@@ -70,11 +71,12 @@ export default function AdminOffres() {
 
     try {
       if (offre.id) {
-        await axios.put(`http://localhost:5000/api/offres/${offre.id}`, dataToSend, {
+        await axios.put(`${import.meta.env.VITE_API_URL}/offres/${offre.id}`, dataToSend, {
           headers: { Authorization: `Bearer ${token}` }
         });
       } else {
-        await axios.post('http://localhost:5000/api/offres', dataToSend, {
+        // 👇 CORRIGÉ : backticks et slash
+        await axios.post(`${import.meta.env.VITE_API_URL}/offres`, dataToSend, {
           headers: { Authorization: `Bearer ${token}` }
         });
       }

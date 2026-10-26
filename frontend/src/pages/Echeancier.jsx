@@ -11,9 +11,10 @@ export default function Echeancier() {
     const fetchData = async () => {
       const token = localStorage.getItem('token');
       try {
+        // 👇 CORRIGÉ
         const [demandeRes, echeancesRes] = await Promise.all([
-          axios.get('http://localhost:5000/api/demandes/ma-demande', { headers: { Authorization: `Bearer ${token}` } }),
-          axios.get('http://localhost:5000/api/demandes/mes-remboursements', { headers: { Authorization: `Bearer ${token}` } })
+          axios.get(`${import.meta.env.VITE_API_URL}/demandes/ma-demande`, { headers: { Authorization: `Bearer ${token}` } }),
+          axios.get(`${import.meta.env.VITE_API_URL}/demandes/mes-remboursements`, { headers: { Authorization: `Bearer ${token}` } })
         ]);
         setDemande(demandeRes.data);
         setEcheances(echeancesRes.data);
@@ -128,14 +129,12 @@ export default function Echeancier() {
                         e.statut === 'paye' ? 'bg-emerald-100 text-emerald-800' : 
                         e.statut === 'en_retard' ? 'bg-red-100 text-red-800' : 'bg-[#e0f0fa] text-[#2563eb]'
                     }`}>
-                    {/* Le petit point de couleur */}
                     <span className={`w-1.5 h-1.5 rounded-full ${
                         e.statut === 'paye' ? 'bg-emerald-500' : 
                         e.statut === 'en_retard' ? 'bg-red-500' : 'bg-[#2563eb]'
                     }`}></span>
-  
-  {e.statut === 'paye' ? 'Payé' : e.statut === 'en_retard' ? 'En retard' : 'À venir'}
-</span>
+                    {e.statut === 'paye' ? 'Payé' : e.statut === 'en_retard' ? 'En retard' : 'À venir'}
+                    </span>
                   </td>
                 </tr>
               ))}

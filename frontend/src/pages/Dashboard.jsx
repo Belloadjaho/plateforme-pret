@@ -5,7 +5,7 @@ import { FileText, CheckCircle2, XCircle, Clock, ArrowRight } from 'lucide-react
 
 export default function Dashboard() {
   const [demande, setDemande] = useState(null);
-  const [echeances, setEcheances] = useState([]); // 👈 Nouvel état
+  const [echeances, setEcheances] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -13,14 +13,15 @@ export default function Dashboard() {
       const token = localStorage.getItem('token');
       if (!token) return;
       try {
-        const res = await axios.get('http://localhost:5000/api/demandes/ma-demande', {
+        // 👇 CORRIGÉ
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/demandes/ma-demande`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setDemande(res.data);
 
-        // Si le prêt est accepté, on charge aussi les échéances pour la barre de progression
         if (res.data.statut === 'acceptee') {
-          const echeancesRes = await axios.get('http://localhost:5000/api/demandes/mes-remboursements', {
+          // 👇 CORRIGÉ
+          const echeancesRes = await axios.get(`${import.meta.env.VITE_API_URL}/demandes/mes-remboursements`, {
             headers: { Authorization: `Bearer ${token}` }
           });
           setEcheances(echeancesRes.data);
@@ -38,7 +39,6 @@ export default function Dashboard() {
 
   const statut = demande?.statut || 'aucun';
 
-  // CALCULS POUR LE FINANCEMENT
   const montant = parseFloat(demande?.montant_demande) || 0;
   const taux = parseFloat(demande?.taux_applique) || 5;
   const duree = parseInt(demande?.duree_mois) || 12;
@@ -47,7 +47,6 @@ export default function Dashboard() {
   const totalDu = montant + interets;
   const mensualite = totalDu / duree;
   
-  // Calcul dynamique du montant payé grâce aux échéances
   const montantPaye = echeances
     .filter(e => e.statut === 'paye')
     .reduce((total, e) => total + parseFloat(e.montant_du), 0);

@@ -22,7 +22,8 @@ export default function Profil() {
     const fetchUser = async () => {
       const token = localStorage.getItem('token');
       try {
-        const res = await axios.get('http://localhost:5000/api/users/me', {
+        // 👇 CORRIGÉ 1
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/users/me`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setFormData({
@@ -53,7 +54,8 @@ export default function Profil() {
     const token = localStorage.getItem('token');
 
     try {
-      const res = await axios.put('http://localhost:5000/api/users/me', formData, {
+      // 👇 CORRIGÉ 2
+      const res = await axios.put(`${import.meta.env.VITE_API_URL}/users/me`, formData, {
         headers: { Authorization: `Bearer ${token}` }
       });
       
